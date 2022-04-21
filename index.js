@@ -1,56 +1,48 @@
+const args = require("minimist")(process.argv.slice(2))
+args["port"]
+const port = args.port || process.env.PORT || 5000
+
 const express = require('express');
-const minimist = require('minimist');
-const fs = require('fs');
-const db = require("./src/services/database.js");
-const morgan = require('morgan');
-
 const app = express()
-const argv = (minimist)(process.argv.slice(2));
-// Serve static HTML files
-//app.use(express.static('./www'));
-app.use(express.static('./public'));
-// Set valid arguments
-argv["port"];
-
-// Get port from argument, if not argument exists set to 5000
-const HTTP_PORT = argv.port || 5000;
-
-//console.log(args)
-const help = (`
-node server.js [options]
-
---port, -p	Set the port number for the server to listen on. Must be an integer
-            between 1 and 65535. Defaults to 5000.
-
---debug, -d If set to true, creates endlpoints /app/log/access/ which returns
-            a JSON access log from the database and /app/error which throws 
-            an error with the message "Error test successful." Defaults to 
-            false.
-
---log, -l   If set to false, no log files are written. Defaults to true.
-            Logs are always written to database.
-
---help, -h	Return this message and exit.
-`)
-// If --help or -h, echo help text to STDOUT and exit
-if (argv.help || argv.h) {
-    console.log(help)
-    process.exit(0)
-}
-
-
+const morgan = require('morgan')
+const fs = require('fs')
+const logdb = require('./src/services/database')
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// log into access.log
-if (!argv.log || argv.l) {
+app.use(express.static('./public'));
+if (!args.log) {
 // Use morgan for logging to files
 // Create a write stream to append to an access.log file
-const accessLog = fs.createWriteStream('data/log/access.log', { flags: 'a' })
+const accessLog = fs.createWriteStream('access.log', { flags: 'a' })
 // Set up the access logging middleware
 app.use(morgan('combined', { stream: accessLog }))
 }
 
+// help text
+const help = (`
+server.js [options]
+
+--port	Set the port number for the server to listen on. Must be an integer
+            between 1 and 65535.
+
+--debug	If set to true, creates endlpoints /app/log/access/ which returns
+            a JSON access log from the database and /app/error which throws 
+            an error with the message "Error test successful." Defaults to 
+            false.
+
+--log		If set to false, no log files are written. Defaults to true.
+            Logs are always written to database.
+
+--help	Return this message and exit.
+`)
+// If --help or -h, echo help text to STDOUT and exit
+if (args.help || args.h) {
+    console.log(help)
+    process.exit(0)
+}
+{
+// db middleware
+/*
 app.use( (req, res, next) => {
   let logdata = {
     remote_addr: req.ip,
@@ -65,12 +57,13 @@ app.use( (req, res, next) => {
     user_agent: req.headers['user-agent']
 }
 
-//const stmt = db.prepare('INSERT INTO accesslog (remote_addr, remote_user, date, method, url, http_version, status, referer, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
-//const info = stmt.run(logdata.remote_addr, logdata.remote_user, logdata.date, logdata.method, logdata.url, logdata.http_version, logdata.status, logdata.referer, logdata.user_agent)
+const stmt = logdb.prepare('INSERT INTO accesslog (remote_addr, remote_user, date, method, url, http_version, status) VALUES (?, ?, ?, ?, ?, ?, ?)')
+const info = stmt.run(logdata.remote_addr, logdata.remote_user, logdata.date, logdata.method, logdata.url, logdata.http_version, logdata.status)
   next()
 })
+*/
 
-
+}
 // Coin flip functions 
  {
  /*
@@ -192,31 +185,46 @@ app.use( (req, res, next) => {
 }
 
 // Endpoints
-if (argv.debug || argv.d) {
-  app.get("/app/log/access/", (req, res) => {
-    const stmt = logdb.prepare('SELECT * FROM accesslog').all()
-    res.status(200).json(stmt)
+if (args.debug){
+  app.get('/app/log/access', (req,res) => {
+      const stmt = logdb.prepare('SELECT * FROM accesslog').all()
+      res.statusCode = 200
+      res.json(stmt)
   })
-
-  app.get('app/error', (req,res) => {
-    throw new Error('Broken')
+  
+  app.get('/app/error', (req,res) => {
+      throw new Error('Error test successful')
   })
-
 }
 
-const server = app.listen(HTTP_PORT, () => {
-    console.log('App listening on port %PORT'.replace('%PORT',HTTP_PORT))
+const server = app.listen(port, () => {
+    console.log('App listening on port %PORT'.replace('%PORT',port))
 });
 
 
 
 app.get('/app/', (req,res) => {
     res.writeHead( res.statusCode, { 'Content-Type' : 'text/plain' });
-    res.statusMessage = 'Your API works!';
-    res.end(res.statusMessage + ' ' + res.statusCode)
+    res.statusMessage = 'OK';
+    res.end(res.statusCode+ ' ' +res.statusMessage)
 })
+
 // Coin Endpoints
 {
+    app.post('/app/flip/coins/', (req, res, next) => {
+        const flips = coinFlips(req.body.number)
+        const count = countFlips(flips)
+        res.status(200).json({"raw":flips,"summary":count})
+    })
+    
+    app.post('/app/flip/call/', (req, res, next) => {
+        const game = flipACoin(req.body.guess)
+        res.status(200).json(game)
+    })
+
+
+
+
 app.get('/app/flip/call/:call', (req,res) => {
   const call = req.params.call;
   res.status(200).json(flipACoin(call))
