@@ -1,5 +1,11 @@
 // Focus div based on nav button click
+const show = document.getElementById("singlenav");
 
+show.addEventListener("click",showData)
+function showData() {
+	document.getElementById("single").classList.remove("hidden");
+	document.getElementById("single").classList.add("active");
+}
 // Flip one coin and show coin image to match result when button clicked
 // Button coin flip element
 const coin = document.getElementById("coin")
@@ -13,8 +19,8 @@ const coin = document.getElementById("coin")
 				.then(function(result) {
 					console.log(result);
 					document.getElementById("result").innerHTML = result.flip;
-					document.getElementById("quarter").setAttribute("src", result.flip+".jpg");
-					coin.disabled = true
+					document.getElementById("quarter").setAttribute("src","assets/img/" + result.flip+".png");
+					coin.disabled = false;
 				})
             }
 // Flip multiple coins and show coin images in table as well as summary results
