@@ -1,9 +1,14 @@
 div.hidden {
   display: none;
+  visibility: hidden;
 }
 
 div.active {
   border: 5px solid red;
+}
+
+div.active2 {
+  border: 5px solid blue;
 }
 
 img.bigcoin {
@@ -12,4 +17,23 @@ img.bigcoin {
 
 img.smallcoin {
   width: 50px;
+}
+body {
+  background-color: #13294B;
+  color: #ffffff;
+}
+.column {
+  float: left;
+  width: 50%;
+}
+
+.formColumn {
+  float: left;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }

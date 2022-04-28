@@ -9,7 +9,13 @@ const fs = require('fs')
 const logdb = require('./src/services/database')
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// Add cors dependency
+const cors = require('cors')
+// Set up cors middleware on all endpoints
+app.use(cors())
 app.use(express.static('./public'));
+
+
 if (!args.log) {
 // Use morgan for logging to files
 // Create a write stream to append to an access.log file
@@ -211,19 +217,7 @@ app.get('/app/', (req,res) => {
 
 // Coin Endpoints
 {
-    app.post('/app/flip/coins/', (req, res, next) => {
-        const flips = coinFlips(req.body.number)
-        const count = countFlips(flips)
-        res.status(200).json({"raw":flips,"summary":count})
-    })
-    
-    app.post('/app/flip/call/', (req, res, next) => {
-        const game = flipACoin(req.body.guess)
-        res.status(200).json(game)
-    })
-
-
-
+   
 
 app.get('/app/flip/call/:call', (req,res) => {
   const call = req.params.call;
@@ -242,6 +236,19 @@ app.get('/app/flips/:number', (req,res) => {
 app.get('/app/echo/:number', (req,res) => {
     res.status(200).json({ 'message': req.params.number })
 })
+
+
+app.post('/app/flip/coins/', (req, res, next) => {
+  const flips = coinFlips(req.body.number)
+  const count = countFlips(flips)
+  res.status(200).json({"raw":flips,"summary":count})
+})
+
+app.post('/app/flip/call/', (req, res, next) => {
+  const game = flipACoin(req.body.guess)
+  res.status(200).json(game)
+})
+
 }
 app.use(function(req,res) {
   res.type("text/plain")
