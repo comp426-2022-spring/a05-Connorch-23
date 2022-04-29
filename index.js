@@ -172,21 +172,19 @@ const info = stmt.run(logdata.remote_addr, logdata.remote_user, logdata.date, lo
    */
   
   function flipACoin(call) {
-   let game;
-    if (call == undefined) {
-      console.log("Error: no input.");
-      console.log("Usage: node guess-flip --call=[heads|tails]");
-    } else if (!call.localeCompare("heads") || !call.localeCompare("tails")) {
-      game = {call:call, flip:coinFlip(), result:'lose'}
-      if (game.call.localeCompare(game.flip) == 0) {
-        game.result = "win"
-      }
+    let flip = coinFlip();
+    let result;
+    if ( flip == call ) {
+        result = 'win'
     } else {
-      console.log("Error: Invalid input");
-      console.log("Usage: node guess-flip --call=[heads|tails]");
+        result = 'lose'
     }
-  
-    return game;
+    let game = {
+        call: call,
+        flip: flip,
+        result: result
+    }
+    return game
   }
 }
 

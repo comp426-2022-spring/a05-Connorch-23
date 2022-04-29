@@ -1,20 +1,3 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=7640304&assignment_repo_type=AssignmentRepo)
-# a05 Human Interface
-
-In this assignment, you will build an HTML human interface for your API. You will also document your API endpoints and consider package structure.
-
-## DO NOT CLONE THIS REPOSITORY DIRECTLY
-
-Use the GitHub classroom link instead: https://classroom.github.com/a/PUVGxeMe
-
-If you clone this repo directly, it will not be added to the organization as an individual repo associated with your account and you will not be able to push to it.
-
-## Instructions
-
-Full instructions for this assignment are available at: https://comp426.johndmart.in/a/05/
-
-<!-- DELETE EVERYTHING ABOVE THIS LINE -->
-
 # Coinserver Description
 
 This package exposes endpoints and provides a web interface to emulate random chance coin flip events in the following ways:
@@ -69,6 +52,9 @@ curl http://localhost:5000/app/
 #### Response headers
 
 ```
+curl -I http://localhost:5000/app/
+```
+```
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -84,19 +70,29 @@ Keep-Alive: timeout=5
 #### Request cURL
 
 ```
-
+curl http://localhost:5000/app/flip/
 ```
 
 #### Response body
 
+
+```json
+{"flip":"tails"}
 ```
 
-```
 
 #### Response headers
 
 ```
-
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=utf-8
+Content-Length: 16
+ETag: W/"10-VYm8Bk1/RW8RGhDXdTwBYk6lbGE"
+Date: Fri, 29 Apr 2022 15:32:11 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
 ```
 
 ### /app/flips/:number/ (GET)
@@ -104,59 +100,54 @@ Keep-Alive: timeout=5
 #### Request cURL
 
 ```
-
+curl http://localhost:5000/app/flips/3
 ```
 
 #### Response body
 
-```
-
+```json
+{"raw":["heads","heads","heads"],"summary":{"heads":3}}
 ```
 
 #### Response headers
 
 ```
-
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=utf-8
+Content-Length: 65
+ETag: W/"41-xFD5mLTl1U2bxcpTr2yjO1m6UQg"
+Date: Fri, 29 Apr 2022 15:33:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
 ```
-
-### /app/flip/coin/ (GET)
-
-#### Request cURL
-
-```
-
-```
-
-#### Response body
-
-```
-
-```
-
-#### Response headers
-
-```
-
-```
-
 ### /app/flip/call/:guess/ (GET)
 
 #### Request cURL
 
 ```
-
+curl http://localhost:5000/app/call/:heads
 ```
 
 #### Response body
 
-```
-
+```json
+{"call":":heads","flip":"heads","result":"lose"}
 ```
 
 #### Response headers
 
 ```
-
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=utf-8
+Content-Length: 48
+ETag: W/"30-N7JF0A1WAR93EpKZk1UQ5JuDpS8"
+Date: Fri, 29 Apr 2022 15:38:22 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
 ```
 
 ### /app/flip/call/ (POST)

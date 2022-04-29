@@ -3,12 +3,8 @@ div.hidden {
   visibility: hidden;
 }
 
-div.active {
-  border: 5px solid red;
-}
-
-div.active2 {
-  border: 5px solid blue;
+button.active {
+  color: #4B9CD3;
 }
 
 img.bigcoin {
