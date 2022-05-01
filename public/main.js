@@ -1,4 +1,4 @@
-
+// Adding comment for commit
 // Focus div based on nav button click
 const homenav = document.getElementById("homenav");
 homenav.addEventListener("click",showHome);
