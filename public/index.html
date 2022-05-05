@@ -27,22 +27,72 @@
   </head>
   <body>
     <nav>
-      <button id="homenav">Home</button>
+      <button id="homenav" class="active">Home</button>
       <button id="singlenav">Flip one coin</button>
       <button id="multinav">Flip multiple coins</button>
       <button id="guessnav">Guess the result</button>
     </nav>
-    <div id="home">
-      
+    <div class="active" id="home">
+      <h2>Instructions:</h2>
+
+      <p>Pick from one of the games above, and play! Each game is pretty easy!</p>
+      <p>The first game flips a coin randomly and shows you the result.</p>
+      <p>The second game lets you flip a specified number of coins and display all of the results.</p>
+      <p>The third game lets you guess what the result of a coin flip will be and tells you if you win.</p>
+      <h2>Have fun!</h2>
+
     </div>    
     <div id="single" class="hidden">
-      
+      <h2>Single Flip:</h2>
+      <button id="coin">Flip?</button>
+      <img id="quarter">
+      <p>Result: <span id="result"></span></p>
     </div>
     <div id="multi" class="hidden">
-      
+      <div id="multi">
+        <h1>Flip many coins</h1>
+        <form id="coins">
+          <label for="number">
+            <strong>How many coins?</strong>
+          </label>
+          <input type="number" name="number" id="number" min="0">
+          <input type="submit" value="Flip 'em!">
+        </form>
+  
+        <h2>Results</h2>
+          <p id="heads"></p>
+          <p id="tails"></p>
+
+          <ul id="coinlist">
+            <li>
+              <img src="assets/img/coin.png"> 
+            </li>
+          </ul>
+      </div>
     </div>
+
+
     <div id="guess" class="hidden">
-      
+      <h1>Guess a coin flip</h1>
+      <form id="call">
+        <label for="side">Select a side:</label>
+        <select name="guess" id="guess" form="call">
+          <option value="heads">Heads</option>
+          <option value="tails">Tails</option>
+        </select>
+        <input type="submit" value="Flip it!">
+      </form>
+
+      <p><span id="choice"></span></p>
+      <p><span id="actual"></span></p>
+      <p><span id="result"></span></p>
+
+      <ul id="coingame">
+        <li>
+          <img src="assets/img/coin.png" class="bigcoin">
+        </li>
+      </ul>
+
     </div>
 	<script src="main.js"></script>
   </body>
